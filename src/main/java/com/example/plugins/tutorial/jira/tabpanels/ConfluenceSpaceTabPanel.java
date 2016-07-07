@@ -74,6 +74,12 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
         {
             return Collections.singletonList(new GenericMessageAction("No Link to a Confluence for this JIRA Project configured"));
         }
+
+        ApplicationLink appLink = applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class);
+        if (appLink == null)
+        {
+            return Collections.singletonList(new GenericMessageAction("No Link to a Confluence for this JIRA application configured"));
+        }
         // System.out.println("\n issueLinkService : " + remoteIssueLinkService.getIssueLinks(remoteUser, issue).getLinkCollection().getLinkTypes());
 
         List<RemoteIssueLink> remoteLinks = remoteIssueLinkService.getRemoteIssueLinksForIssue(remoteUser, issue).getRemoteIssueLinks();
@@ -102,15 +108,13 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
             System.out.println("hasStatusCategory: " + remoteLinks.get(i).hasStatusCategory());
             System.out.println("isResolved: " + remoteLinks.get(i).isResolved());
         }
-        
-        // ApplicationLinkRequestFactory requestFactory = entityLink.getApplicationLink().createAuthenticatedRequestFactory();
-        ApplicationLink appLink = applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class);
-        ApplicationLinkRequestFactory requestFactory = appLink.createAuthenticatedRequestFactory();
 
+        // ApplicationLinkRequestFactory requestFactory = entityLink.getApplicationLink().createAuthenticatedRequestFactory();
+
+        ApplicationLinkRequestFactory requestFactory = appLink.createAuthenticatedRequestFactory();
         final String query = issue.getKey();
         String confluenceContentType = "page";
-        // final String spaceKey = entityLink.getKey();
-        final String spaceKey = "STJ";
+        final String spaceKey = entityLink.getKey();
 
         System.out.println("\nquery : " + query);
         System.out.println("\napplicationLinkService : " + applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class));

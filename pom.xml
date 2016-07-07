@@ -99,6 +99,12 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>com.atlassian.activeobjects</groupId>
+          <artifactId>activeobjects-plugin</artifactId>
+          <version>${ao.version}</version>
+          <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -120,6 +126,18 @@
 						</pluginArtifact>
 					</pluginArtifacts>
 					-->
+                    <pluginArtifacts>
+                      <pluginArtifact>
+                        <groupId>com.atlassian.activeobjects</groupId>
+                        <artifactId>activeobjects-plugin</artifactId>
+                        <version>${ao.version}</version>
+                      </pluginArtifact>
+                      <pluginArtifact>
+                        <groupId>com.atlassian.activeobjects</groupId>
+                        <artifactId>activeobjects-jira43-spi</artifactId>
+                        <version>${ao.version}</version>
+                      </pluginArtifact>
+                    </pluginArtifacts>
                     <enableQuickReload>true</enableQuickReload>
                     <enableFastdev>false</enableFastdev>
                     <!-- See here for an explanation of default instructions: -->
@@ -160,8 +178,9 @@
         </plugins>
     </build>
     <properties>
-        <jira.version>7.1.8</jira.version>
-        <amps.version>6.2.4</amps.version>
+        <jira.version>7.1.9</jira.version>
+        <amps.version>6.2.6</amps.version>
+        <ao.version>0.18</ao.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
