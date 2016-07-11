@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +52,13 @@ import com.atlassian.applinks.api.application.confluence.ConfluenceApplicationTy
 import com.atlassian.jira.bc.issue.link.RemoteIssueLinkService;
 import com.atlassian.jira.issue.link.RemoteIssueLink;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
+import com.atlassian.sal.api.transaction.TransactionCallback;
+
+import  com.atlassian.jira.util.json.JSONObject;
+import com.atlassian.jira.util.json.JSONException;
+
+
 @Scanned
 public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements IssueTabPanel
 {
@@ -59,12 +68,14 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
     @ComponentImport private final EntityLinkService entityLinkService;
     @ComponentImport private final ApplicationLinkService applicationLinkService;
     @ComponentImport private final RemoteIssueLinkService remoteIssueLinkService;
+    @ComponentImport private final ActiveObjects ao;
 
-    public ConfluenceSpaceTabPanel(EntityLinkService entityLinkService, ApplicationLinkService applicationLinkService, RemoteIssueLinkService remoteIssueLinkService)
+    public ConfluenceSpaceTabPanel(EntityLinkService entityLinkService, ApplicationLinkService applicationLinkService, RemoteIssueLinkService remoteIssueLinkService, ActiveObjects ao)
     {
         this.entityLinkService = entityLinkService;
         this.applicationLinkService = applicationLinkService;
         this.remoteIssueLinkService = remoteIssueLinkService;
+        this.ao = ao;
     }
 
     public List getActions(Issue issue, ApplicationUser remoteUser)
@@ -91,6 +102,7 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
             System.out.println("getApplicationName: " + remoteLinks.get(i).getApplicationName());
             System.out.println("getApplicationType: " + remoteLinks.get(i).getApplicationType());
             System.out.println("getGlobalId: " + remoteLinks.get(i).getGlobalId());
+            System.out.println("getQueryMap: " + getQueryMap(remoteLinks.get(i).getGlobalId()));
             System.out.println("getIconTitle: " + remoteLinks.get(i).getIconTitle());
             System.out.println("getIconUrl: " + remoteLinks.get(i).getIconUrl());
             System.out.println("getId: " + remoteLinks.get(i).getId());
@@ -120,48 +132,88 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
         System.out.println("\napplicationLinkService : " + applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class));
         System.out.println("\nspaceKey : " + spaceKey);
 
+        System.out.println("\nAO : "+ ao);
+        // ao.executeInTransaction(new TransactionCallback<Todo>()
+        // {
+        //     @Override
+        //     public Todo doInTransaction()
+        //     {
+        //         // final Todo todo = ao.create(Todo.class);
+        //         // todo.setUserId("setUserId 3");
+        //         // todo.setIssueId("setIssueId 3");
+        //         // todo.setVersion("setVersion 3");
+        //         // todo.save(); // (4)
+        //         // // System.out.println("\n----------------------------------------\n");
+        //         // for (Todo todo_find : ao.find(Todo.class)) // (2)
+        //         // {
+        //         //     System.out.println("\nAO UserId: "+ todo_find.getUserId());
+        //         //     System.out.println("\nAO IssueId: "+ todo_find.getIssueId());
+        //         //     System.out.println("\nAO Version: "+ todo_find.getVersion());
+        //         // }
+        //         // System.out.println("\n----------------------------------------\n");
+        //         return ao.find(Todo.class);
+        //     }
+        // });
+        // Todo[] todos = ao.find(Todo.class);
+        // Todo todo = ao.create(Todo.class);
+        // todo.setUserId("getDirectoryId " + remoteUser.getDirectoryId());
+        // todo.setIssueId("getKey " + remoteUser.getKey());
+        // todo.setVersion("setVersion " + (todos.length + 1));
+        // todo.save();
+        // System.out.println("\nAO TEST: "+ todos.length);
+        // System.out.println("\n----------------------------------------\n");
+        System.out.println("\nBEFORE DELETE\n");
+        for (Todo todo_find : ao.find(Todo.class)) // (2)
+        {
+            System.out.println("\nAO UserId: "+ todo_find.getUserId());
+            System.out.println("AO IssueId: "+ todo_find.getIssueId());
+            System.out.println("AO Version: "+ todo_find.getVersion());
+        }
+        // ao.delete(ao.find(Todo.class));
 
         try
         {
-            ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET, "/rest/prototype/1/search?query=" + query + "&spaceKey=" + spaceKey + "&type=" + confluenceContentType);
-            String responseBody = request.execute(new ApplicationLinkResponseHandler<String>()
-            {
-                public String credentialsRequired(final Response response) throws ResponseException
-                {
-                    return response.getResponseBodyAsString();
-                }
-
-                public String handle(final Response response) throws ResponseException
-                {
-                    return response.getResponseBodyAsString();
-                }
-            });
-
-            Document document = parseResponse(responseBody);
-            NodeList results = document.getDocumentElement().getChildNodes();
-
+            ApplicationLinkRequest request;
+            String responseBody, url_issue;
+            int iz = 0;
+            JSONObject json;
+            IssueAction searchResult;
             List<IssueAction> issueActions = new ArrayList<IssueAction>();
-
-            for (int j = 0; j < results.getLength(); j++)
-            {
-                NodeList links = results.item(j).getChildNodes();
-                for (int i = 0; i < links.getLength(); i++)
+            for(RemoteIssueLink link : remoteLinks){
+                request = requestFactory.createRequest(Request.MethodType.GET, "rest/api/content/" + getQueryMap(link.getGlobalId()).get("pageId") + "?extend=version");
+                responseBody = request.execute(new ApplicationLinkResponseHandler<String>()
                 {
-                    Node linkNode = links.item(i);
-                    if ("link".equals(linkNode.getNodeName()))
+                    public String credentialsRequired(final Response response) throws ResponseException
                     {
-                        NamedNodeMap attributes = linkNode.getAttributes();
-                        Node type = attributes.getNamedItem("type");
-                        if (type != null && "text/html".equals(type.getNodeValue()))
-                        {
-                            Node href = attributes.getNamedItem("href");
-                            URI uriToConfluencePage = URI.create(href.getNodeValue());
-
-                            IssueAction searchResult = new GenericMessageAction(String.format("Reference to Issue found in Confluence page <a target=\"_new\" href=%1$s>%1$s</a>", uriToConfluencePage.toString()));
-                            issueActions.add(searchResult);
-                        }
+                        return response.getResponseBodyAsString();
                     }
+
+                    public String handle(final Response response) throws ResponseException
+                    {
+                        return response.getResponseBodyAsString();
+                    }
+                });
+                json = new JSONObject(responseBody);
+                Long version = json.getJSONObject("version").getLong("number");
+                System.out.println("\n<-- VERSION -->\n" + version);
+                // if (iz % 2 == 0){
+                //     Todo todo = ao.create(Todo.class);
+                //     todo.setUserId(remoteUser.getDirectoryId());
+                //     todo.setIssueId(link.getGlobalId());
+                //     todo.setVersion(version);
+                //     todo.save();
+                // }
+                // iz++;
+
+                Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", remoteUser.getDirectoryId(), link.getGlobalId());
+                if (todos.length > 0 && todos[0].getVersion() == version){
+                    url_issue = link.getUrl();
+                    searchResult = new GenericMessageAction(String.format("You have already seen this article: <a target=\"_new\" href=%1$s>%1$s</a>", url_issue));
+                }else{
+                    url_issue = link.getUrl();
+                    searchResult = new GenericMessageAction(String.format("Article have changed or added: <a target=\"_new\" href=%1$s>%1$s</a>", url_issue));
                 }
+                issueActions.add(searchResult);
             }
             return issueActions;
         }
@@ -177,18 +229,22 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
         {
             return Collections.singletonList(new GenericMessageAction("Response exception. Message: " + e.getMessage()));
         }
-        catch (ParserConfigurationException e)
-        {
+        catch (JSONException e){
             return Collections.singletonList(new GenericMessageAction("Failed to read response from Confluence." + e.getMessage()));
         }
-        catch (SAXException e)
+    }
+
+    public static Map<String, String> getQueryMap(String query)
+    {
+        String[] params = query.split("&");
+        Map<String, String> map = new HashMap<String, String>();
+        for (String param : params)
         {
-            return Collections.singletonList(new GenericMessageAction("Failed to read response from Confluence." + e.getMessage()));
+            String name = param.split("=")[0];
+            String value = param.split("=")[1];
+            map.put(name, value);
         }
-        catch (IOException e)
-        {
-            return Collections.singletonList(new GenericMessageAction("Failed to read response from Confluence." + e.getMessage()));
-        }
+        return map;
     }
 
     public boolean showPanel(Issue issue, ApplicationUser remoteUser)

@@ -24,4 +24,8 @@
     <order>10</order>
     <resource type="velocity" name="view" location="templates/tabpanels/confluence-space-tab-panel.vm"/>
   </issue-tabpanel>
+  <ao key="ao-module">
+    <description>The module configuring the Active Objects service used by this plugin</description>
+    <entity>com.example.plugins.tutorial.jira.tabpanels.Todo</entity>
+  </ao>
 </atlassian-plugin>
