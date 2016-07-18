@@ -1,0 +1,26 @@
+#* @vtlmacrolibrary path="../../../../../../../jira-core/src/main/resources/templates/plugins/jira/issuelinks/macros.vm" *#
+#* @vtlvariable name="noApplinkAuthConfigured" type="java.lang.Boolean" *#
+#* @vtlvariable name="applicationUrl" type="java.net.URI" *#
+#* @vtlvariable name="appLinkId" type="com.atlassian.applinks.api.ApplicationId" *#
+#* @vtlvariable name="id" type="java.lang.Long" *#
+#* @vtlvariable name="title" type="java.lang.String" *#
+#* @vtlvariable name="url" type="java.lang.String" *#
+#* @vtlvariable name="tooltip" type="java.lang.String" *#
+#* @vtlvariable name="iconTooltip" type="java.lang.String" *#
+#* @vtlvariable name="iconUrl" type="java.lang.String" *#
+#* @vtlvariable name="authenticationRequired" type="java.lang.Boolean" *#
+#* @vtlvariable name="newVersion" type="java.lang.Boolean" *#
+#* @vtlvariable name="permissionDenied" type="java.lang.Boolean" *#
+#* @vtlvariable name="authenticationUrl" type="java.lang.String" *#
+#* @vtlvariable name="applicationName" type="java.lang.String" *#
+#* @vtlvariable name="i18n" type="com.atlassian.jira.action.JiraActionSupport" *#
+#* @vtlvariable name="textutils" type="com.opensymphony.util.TextUtils" *#
+
+<p>
+    #renderIssueLinkIcon(${iconUrl} ${iconTooltip} ${iconTooltip} ${textutils})
+    <span title="${textutils.htmlEncode($tooltip)}">
+    	Final Link
+        <a href="${url}" target="_blank" class="link-title">${textutils.htmlEncode($title)}</a> <span class="link-summary">${textutils.htmlEncode($!summary)}</span>
+        <strong>New version: ${newVersion}</strong>
+    </span>
+</p>€

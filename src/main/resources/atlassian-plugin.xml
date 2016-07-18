@@ -18,14 +18,24 @@
     <resource type="download" name="images/" location="/images"/>
     <context>tutorial-jira-ual</context>
   </web-resource>
+
   <issue-tabpanel key="confluence-space-tab-panel" name="Confluence Space Tab Panel" i18n-name-key="confluence-space-tab-panel.name" class="com.example.plugins.tutorial.jira.tabpanels.ConfluenceSpaceTabPanel">
     <description key="confluence-space-tab-panel.description">The Confluence Space Tab Panel Plugin</description>
     <label key="confluence-space-tab-panel.label"></label>
     <order>10</order>
-    <resource type="velocity" name="view" location="templates/tabpanels/confluence-space-tab-panel.vm"/>
+    <resource name="view" type="velocity" location="templates/tabpanels/confluence-space-tab-panel.vm"/>
+    <!-- <resource name="final-view" type="velocity" location="templates/tabpanels/confluence-space-tab-panel.vm"/> -->
   </issue-tabpanel>
+
   <ao key="ao-module">
     <description>The module configuring the Active Objects service used by this plugin</description>
     <entity>com.example.plugins.tutorial.jira.tabpanels.Todo</entity>
   </ao>
+
+  <issue-link-renderer key="customIssueLinkRenderer"  application-type="com.atlassian.confluence" class="com.example.plugins.tutorial.jira.tabpanels.CustomIssueLinkRenderer">
+    <description key="customIssueLinkRenderer.description">Custom renderer of Issue links for confluence application</description>
+    <resource name="initial-view" type="velocity" location="templates/tabpanels/initiallink.vm"/>
+    <resource name="final-view" type="velocity" location="templates/tabpanels/finallink.vm"/>
+  </issue-link-renderer>
+
 </atlassian-plugin>

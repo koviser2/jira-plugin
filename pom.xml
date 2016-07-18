@@ -105,6 +105,18 @@
           <version>${ao.version}</version>
           <scope>provided</scope>
         </dependency>
+        <dependency>
+          <groupId>com.atlassian.jira</groupId>
+          <artifactId>jira-issue-link-remote-jira-plugin</artifactId>
+          <version>${jira.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.atlassian.jira</groupId>
+          <artifactId>jira-view-issue-plugin</artifactId>
+          <version>${jira.version}</version>
+          <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
