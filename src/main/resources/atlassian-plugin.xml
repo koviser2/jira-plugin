@@ -17,6 +17,7 @@
     <resource type="download" name="tutorial-jira-ual.js" location="/js/tutorial-jira-ual.js"/>
     <resource type="download" name="images/" location="/images"/>
     <context>jira.view.issue</context>
+    <!-- <context>jira.general</context> -->
   </web-resource>
 
   <issue-tabpanel key="confluence-space-tab-panel" name="Confluence Space Tab Panel" i18n-name-key="confluence-space-tab-panel.name" class="com.example.plugins.tutorial.jira.tabpanels.ConfluenceSpaceTabPanel">

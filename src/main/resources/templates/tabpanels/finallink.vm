@@ -19,12 +19,12 @@
 #* @vtlvariable name="textutils" type="com.opensymphony.util.TextUtils" *#
 
 #if ($newVersion)
-	#set ($class_name = "remote_finali_link")
-	#set ($checked = "")
+    #set ($class_name = "remote_finali_link")
+    #set ($checked = "")
 
 #else
-	#set ($class_name = "")
-	#set ($checked = "checked")
+    #set ($class_name = "")
+    #set ($checked = "checked")
 #end
 
 <p class="render_issue_link_for_confluence">
@@ -32,8 +32,8 @@
     <span title="${textutils.htmlEncode($tooltip)}" class="remote_find_class ${class_name}">
         <a href="${url}" target="_blank" class="link-title">${textutils.htmlEncode($title)}</a> <span class="link-summary">${textutils.htmlEncode($!summary)}</span>
         <label>
-        	<input type="checkbox" name="link_${id}" value="${id}" data-id="${globalId}" data-url="${baseUrl}" ${checked}>
-        	Read
+            <input type="checkbox" name="link_${id}" value="${id}" data-id="${globalId}" data-url="${baseUrl}" ${checked}>
+            Read
         </label>
     </span>
 </p>

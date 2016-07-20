@@ -29,21 +29,21 @@ import java.util.HashMap;
 @ExportAsService
 public class VersionService
 {
-	private JiraAuthenticationContext     authContext;
+    private JiraAuthenticationContext     authContext;
     private ApplicationUser               currentUser;
     private final ApplicationLinkService  applicationLinkService;
-    private final ActiveObjects 		  ao;
+    private final ActiveObjects           ao;
 
-	@Autowired
-	public VersionService(ApplicationLinkService applicationLinkService, ActiveObjects ao) {
-		this.authContext            = ComponentAccessor.getJiraAuthenticationContext();
+    @Autowired
+    public VersionService(ApplicationLinkService applicationLinkService, ActiveObjects ao) {
+        this.authContext            = ComponentAccessor.getJiraAuthenticationContext();
         this.currentUser            = this.authContext.getLoggedInUser();
         this.applicationLinkService = applicationLinkService;
         this.ao                     = ao;
     }
 
     public ApplicationUser getUser(){
-    	return currentUser;
+        return currentUser;
     }
 
     public String getBaseUrl()
