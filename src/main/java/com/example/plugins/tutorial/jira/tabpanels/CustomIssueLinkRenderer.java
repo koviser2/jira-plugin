@@ -14,7 +14,7 @@ import com.atlassian.applinks.api.ApplicationLinkService;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.activeobjects.external.ActiveObjects;
-// import com.google.common.collect.RegularImmutableMap;
+
 @Scanned
 public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements IssueLinkRenderer
 {
@@ -23,16 +23,12 @@ public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements
     public VersionService versionService;
 
 	public CustomIssueLinkRenderer(@ComponentImport ApplicationLinkService applicationLinkService, ActiveObjects ao){
-        System.out.println("\n\n\nCustomIssueLinkRenderer");
         this.versionService = new VersionService(applicationLinkService, ao);
 	}
 
 	@Override
     public boolean requiresAsyncLoading(RemoteIssueLink remoteIssueLink)
-    {
-    	System.out.println("\nrequiresAsyncLoading\n");
-        // all weather links need to fetch the current weather information
-        // so we always require async rendering
+    {    	
         return true;
     }
 
@@ -47,9 +43,13 @@ public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements
             //     .title("New title of link")
             //     .summary("versionService.getInform()")
             //     .url("Some Url")
-            //     .build();    
+            //     .build();  
+        
         HashMap<String, Object> result = new HashMap<String, Object>(getInitialContext(remoteIssueLink, context));
-        result.put("newVersion", versionService.newVersion(remoteIssueLink));
+        HashMap<String, Object> information = versionService.getInfo(remoteIssueLink);
+        result.putAll(information);
+        result.put("globalId", remoteIssueLink.getGlobalId());
+        System.out.println("result: " + result);
         return result;
     }
 }

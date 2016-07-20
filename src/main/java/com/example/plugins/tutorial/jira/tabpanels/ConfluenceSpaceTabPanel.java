@@ -80,11 +80,11 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
 
     public List getActions(Issue issue, ApplicationUser remoteUser)
     {
-        EntityLink entityLink = entityLinkService.getPrimaryEntityLink(issue.getProjectObject(), ConfluenceSpaceEntityType.class);
-        if (entityLink == null)
-        {
-            return Collections.singletonList(new GenericMessageAction("No Link to a Confluence for this JIRA Project configured"));
-        }
+        // EntityLink entityLink = entityLinkService.getPrimaryEntityLink(issue.getProjectObject(), ConfluenceSpaceEntityType.class);
+        // if (entityLink == null)
+        // {
+        //     return Collections.singletonList(new GenericMessageAction("No Link to a Confluence for this JIRA Project configured"));
+        // }
 
         ApplicationLink appLink = applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class);
         if (appLink == null)
@@ -126,11 +126,11 @@ public class ConfluenceSpaceTabPanel extends AbstractIssueTabPanel implements Is
         ApplicationLinkRequestFactory requestFactory = appLink.createAuthenticatedRequestFactory();
         final String query = issue.getKey();
         String confluenceContentType = "page";
-        final String spaceKey = entityLink.getKey();
+        // final String spaceKey = entityLink.getKey();
 
         System.out.println("\nquery : " + query);
         System.out.println("\napplicationLinkService : " + applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class));
-        System.out.println("\nspaceKey : " + spaceKey);
+        // System.out.println("\nspaceKey : " + spaceKey);
 
         System.out.println("\nAO : "+ ao);
         // ao.executeInTransaction(new TransactionCallback<Todo>()

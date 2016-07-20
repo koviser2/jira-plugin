@@ -1,0 +1,10 @@
+@keyframes example {
+    0% {color: #FF0000;}
+    50% {color: #3b73af;}
+    100% {color: #FF0000;}
+}
+
+.remote_finali_link a{
+	color: #FF0000;
+	animation: example 4s infinite;
+}
