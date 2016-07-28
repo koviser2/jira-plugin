@@ -29,28 +29,17 @@ public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements
 
 	@Override
     public boolean requiresAsyncLoading(RemoteIssueLink remoteIssueLink)
-    {    	
+    {
         return true;
     }
 
     @Override
     public Map<String, Object> getFinalContext(RemoteIssueLink remoteIssueLink, Map<String, Object> context) {
-        // fetch the weather
-            // RemoteIssueLink updatedLinkObject = new RemoteIssueLinkBuilder()
-            //     .issueId(remoteIssueLink.getIssueId())
-            //     .applicationName(remoteIssueLink.getApplicationName())
-            //     .applicationType(remoteIssueLink.getApplicationType())
-            //     .globalId(remoteIssueLink.getGlobalId())
-            //     .title("New title of link")
-            //     .summary("versionService.getInform()")
-            //     .url("Some Url")
-            //     .build();  
-        
         HashMap<String, Object> result = new HashMap<String, Object>(getInitialContext(remoteIssueLink, context));
         HashMap<String, Object> information = versionService.getInfo(remoteIssueLink);
         result.putAll(information);
         result.put("globalId", remoteIssueLink.getGlobalId());
-        System.out.println("result: " + result);
+
         return result;
     }
 }

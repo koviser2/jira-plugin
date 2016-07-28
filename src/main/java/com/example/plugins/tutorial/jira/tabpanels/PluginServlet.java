@@ -106,11 +106,6 @@ public class PluginServlet extends HttpServlet
 
       Long version = (Long)map.get("version");
       boolean checked = Boolean.parseBoolean(req.getParameterValues("checked")[0]);
-
-      // System.out.println("req.getParameterValues(\"id\"): " + id);
-      // System.out.println("req.getParameterValues(\"version\"): " + version);
-      // System.out.println("User: " + req.getRemoteUser().getClass().getName());
-      // System.out.println("currentUser: " + versionService.getUser());
       Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", versionService.getUser().getDirectoryId(), id);
 
       if (todos.length == 0 && checked)
@@ -130,7 +125,7 @@ public class PluginServlet extends HttpServlet
       }
 
       json.put("success", true);
-      if (req.getParameterValues("ids").length > 0){
+      if (req.getParameterValues("ids") != null){
         json.put("responseIds", versionService.getIssuesIds(req.getParameterValues("id"), req.getParameterValues("ids")));
       }
       resp.getWriter().write(json.toString());

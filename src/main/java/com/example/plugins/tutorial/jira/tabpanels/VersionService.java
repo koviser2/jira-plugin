@@ -170,14 +170,12 @@ public class VersionService
         ApplicationLink appLink = applicationLinkService.getPrimaryApplicationLink(ConfluenceApplicationType.class);
         if (appLink == null)
         {
-            System.out.println("\n\n\nappLink == null\n\n\n");
             map.put("newVersion", false);
             return map;
         }
 
         if (getQueryMap(globalId).get("pageId") == null)
         {
-            System.out.println("\n\n\nglobalId == null\n\n\n");
             map.put("newVersion", false);
             return map;
         }
@@ -204,10 +202,6 @@ public class VersionService
             Long version = json.getJSONObject("version").getLong("number");
             Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", currentUser.getDirectoryId(), globalId);
             if (todos.length > 0 && todos[0].getVersion() == version){
-                System.out.println("\n\n\n False after if in VersionService");
-                System.out.println("todos.length: " + todos.length);
-                System.out.println("todos[0].getVersion(): " + todos[0].getVersion());
-                System.out.println("version: " + version);
                 map.put("newVersion", false);
             }else{
                 map.put("newVersion", true);
