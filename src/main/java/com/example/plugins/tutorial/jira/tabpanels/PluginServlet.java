@@ -15,6 +15,7 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.applinks.api.ApplicationLinkService;
 import java.util.HashMap;
 
+import com.atlassian.jira.bc.issue.link.RemoteIssueLinkService;
 import com.atlassian.jira.plugin.webfragment.model.JiraHelper;
 
 @Scanned
@@ -25,14 +26,52 @@ public class PluginServlet extends HttpServlet
   private final ActiveObjects       ao;
   public VersionService             versionService;
 
-  public PluginServlet(@ComponentImport ApplicationLinkService applicationLinkService, ActiveObjects ao)
+  public PluginServlet(@ComponentImport ApplicationLinkService applicationLinkService, ActiveObjects ao, RemoteIssueLinkService remoteIssueLinkService)
   {
     this.ao             = ao;
-    this.versionService = new VersionService(applicationLinkService, ao);
+    this.versionService = new VersionService(applicationLinkService, ao, remoteIssueLinkService);
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+  {
+    try
+    {
+      JSONObject json = new JSONObject();
+
+      if (req.getRemoteUser() == null)
+      {
+        json.put("success", false).put("message", "Authorization has failed");
+        resp.getWriter().write(json.toString());
+        return;
+      }
+
+      if (req.getParameterValues("ids") == null)
+      {
+        json.put("success", false).put("message", "Bad attributes");
+        resp.getWriter().write(json.toString());
+        return;
+      }
+
+      json.put("success", true);
+      json.put("ids", req.getParameterValues("ids"));
+      json.put("list", versionService.getIssues(req.getParameterValues("ids")));
+      json.put("remotes", versionService.getRemotes(versionService.getIssues(req.getParameterValues("ids"))));
+      json.put("radIds", versionService.getChangesIds(req.getParameterValues("ids")));
+
+      if(req.getParameterValues("globalId") != null){
+        json.put("responseIds", versionService.getIssuesIds(req.getParameterValues("globalId")));
+      }
+
+      resp.getWriter().write(json.toString());
+    }
+    catch (JSONException e){
+      System.out.println("\n\n\nJSONException");
+    }
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 
   {
     try
@@ -68,10 +107,10 @@ public class PluginServlet extends HttpServlet
       Long version = (Long)map.get("version");
       boolean checked = Boolean.parseBoolean(req.getParameterValues("checked")[0]);
 
-      System.out.println("req.getParameterValues(\"id\"): " + id);
-      System.out.println("req.getParameterValues(\"version\"): " + version);
-      System.out.println("User: " + req.getRemoteUser().getClass().getName());
-      System.out.println("currentUser: " + versionService.getUser());
+      // System.out.println("req.getParameterValues(\"id\"): " + id);
+      // System.out.println("req.getParameterValues(\"version\"): " + version);
+      // System.out.println("User: " + req.getRemoteUser().getClass().getName());
+      // System.out.println("currentUser: " + versionService.getUser());
       Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", versionService.getUser().getDirectoryId(), id);
 
       if (todos.length == 0 && checked)
@@ -91,6 +130,9 @@ public class PluginServlet extends HttpServlet
       }
 
       json.put("success", true);
+      if (req.getParameterValues("ids").length > 0){
+        json.put("responseIds", versionService.getIssuesIds(req.getParameterValues("id"), req.getParameterValues("ids")));
+      }
       resp.getWriter().write(json.toString());
     }
     catch (JSONException e){

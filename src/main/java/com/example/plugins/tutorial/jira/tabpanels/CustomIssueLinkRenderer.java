@@ -14,6 +14,7 @@ import com.atlassian.applinks.api.ApplicationLinkService;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.activeobjects.external.ActiveObjects;
+import com.atlassian.jira.bc.issue.link.RemoteIssueLinkService;
 
 @Scanned
 public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements IssueLinkRenderer
@@ -22,8 +23,8 @@ public class CustomIssueLinkRenderer extends DefaultIssueLinkRenderer implements
     // private final VersionService versionService;
     public VersionService versionService;
 
-	public CustomIssueLinkRenderer(@ComponentImport ApplicationLinkService applicationLinkService, ActiveObjects ao){
-        this.versionService = new VersionService(applicationLinkService, ao);
+	public CustomIssueLinkRenderer(@ComponentImport ApplicationLinkService applicationLinkService, ActiveObjects ao, RemoteIssueLinkService remoteIssueLinkService){
+        this.versionService = new VersionService(applicationLinkService, ao, remoteIssueLinkService);
 	}
 
 	@Override
