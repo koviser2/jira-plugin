@@ -14,8 +14,20 @@ function getArray(){
   return array;
 }
 
+function restartClasses(){
+  var elements = $(".ghx_remote_finali_link");
+  elements.removeClass("ghx_remote_finali_link");
+  elements.width();
+  elements.addClass("ghx_remote_finali_link");
+
+  var elements2 = $(".remote_finali_link");
+  elements2.removeClass("remote_finali_link");
+  elements2.width();
+  elements2.addClass("remote_finali_link");
+}
+
 AJS.$(document).ready(function () {
-  AJS.$(".aui-page-panel").bind("DOMNodeInserted",function(){
+  AJS.$(".aui-page-panel").bind("DOMNodeInserted", function(){
     var array = getArray();
     if (array.length > 0 && !$(this).hasClass("ghx_remote_finali_link_flag")){
       $(this).addClass("ghx_remote_finali_link_flag");
@@ -64,6 +76,7 @@ AJS.$(document).ready(function () {
                         $(getStr(response.responseIds.radIds)).addClass("ghx_remote_finali_link");
                         $(getStr(response.responseIds.normalIds)).removeClass("ghx_remote_finali_link");
                       }
+                      restartClasses();
                   }
                 }
 

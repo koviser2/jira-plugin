@@ -4,11 +4,18 @@
     100% {color: #FF0000;}
 }
 
+@keyframes ticket {
+    0% {background: #FFFFFF;}
+    50% {background: #EB5858;}
+    100% {background: #FFFFFF;}
+}
+
 .remote_finali_link a{
 	color: #FF0000;
 	animation: example 4s infinite;
 }
 
 .ghx_remote_finali_link {
-  background: #EB5858 !important;  
+  background: #EB5858;
+  animation: ticket 4s infinite;  
 }

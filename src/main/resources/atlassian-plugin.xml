@@ -16,9 +16,6 @@
     <resource type="download" name="tutorial-jira-ual.css" location="/css/tutorial-jira-ual.css"/>
     <resource type="download" name="tutorial-jira-ual.js" location="/js/tutorial-jira-ual.js"/>
     <resource type="download" name="images/" location="/images"/>
-    <!-- <context>jira.view.issue</context> -->
-    <!-- <context>jira.dashboard</context> -->
-    <!-- atl.gh -->
     <context>jira.general</context>
   </web-resource>
 
@@ -27,7 +24,6 @@
     <label key="confluence-space-tab-panel.label"></label>
     <order>10</order>
     <resource name="view" type="velocity" location="templates/tabpanels/confluence-space-tab-panel.vm"/>
-    <!-- <resource name="final-view" type="velocity" location="templates/tabpanels/confluence-space-tab-panel.vm"/> -->
   </issue-tabpanel>
 
   <ao key="ao-module">
