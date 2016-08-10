@@ -1,8 +1,8 @@
-package ut.com.example.plugins.tutorial;
+package ut.com.developex.plugins.confluence;
 
 import org.junit.Test;
-import com.example.plugins.tutorial.api.MyPluginComponent;
-import com.example.plugins.tutorial.impl.MyPluginComponentImpl;
+import com.developex.plugins.confluence.api.MyPluginComponent;
+import com.developex.plugins.confluence.impl.MyPluginComponentImpl;
 
 import static org.junit.Assert.assertEquals;
 

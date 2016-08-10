@@ -1,4 +1,4 @@
-package com.example.plugins.tutorial.jira.tabpanels;
+package com.developex.plugins.confluence.jira.tabpanels;
 
 import com.atlassian.plugin.spring.scanner.annotation.export.ExportAsService;
 import org.springframework.beans.factory.annotation.Autowired;

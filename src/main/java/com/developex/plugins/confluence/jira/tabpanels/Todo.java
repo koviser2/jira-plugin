@@ -1,4 +1,4 @@
-package com.example.plugins.tutorial.jira.tabpanels;
+package com.developex.plugins.confluence.jira.tabpanels;
 
 import net.java.ao.Entity;
 import net.java.ao.Preload;

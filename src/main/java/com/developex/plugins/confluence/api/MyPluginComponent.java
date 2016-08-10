@@ -1,4 +1,4 @@
-package com.example.plugins.tutorial.api;
+package com.developex.plugins.confluence.api;
 
 public interface MyPluginComponent
 {

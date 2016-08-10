@@ -1,4 +1,4 @@
-package com.example.plugins.tutorial.jira.tabpanels;
+package com.developex.plugins.confluence.jira.tabpanels;
 
 import com.atlassian.jira.plugin.link.remotejira.RemoteJiraIssueLinkRenderer;
 import com.atlassian.jira.plugin.issuelink.IssueLinkRenderer;
