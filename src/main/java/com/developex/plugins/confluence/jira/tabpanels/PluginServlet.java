@@ -106,12 +106,13 @@ public class PluginServlet extends HttpServlet
 
       Long version = (Long)map.get("version");
       boolean checked = Boolean.parseBoolean(req.getParameterValues("checked")[0]);
-      Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", versionService.getUser().getDirectoryId(), id);
+      // Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", versionService.getUser().getDirectoryId(), id);
+      Todo[] todos = ao.find(Todo.class, "issue_id = ?", id);
 
       if (todos.length == 0 && checked)
       {
         Todo todo = ao.create(Todo.class);
-        todo.setUserId(versionService.getUser().getDirectoryId());
+        // todo.setUserId(versionService.getUser().getDirectoryId());
         todo.setIssueId(id);
         todo.setVersion(version);
         todo.save();

@@ -10,7 +10,7 @@
         <url>http://developex.com.ua</url>
     </organization>
     <name>developex-jira-confluence</name>
-    <description>This is the plugin, which is searching all chenges in remote links from confluence.</description>
+    <description>This is the plugin, which is looking for all chenges in remote links from confluence.</description>
     <packaging>atlassian-plugin</packaging>
     <dependencies>
         <dependency>

@@ -200,7 +200,8 @@ public class VersionService
 
             JSONObject json = new JSONObject(responseBody);
             Long version = json.getJSONObject("version").getLong("number");
-            Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", currentUser.getDirectoryId(), globalId);
+            // Todo[] todos = ao.find(Todo.class, "user_id = ? AND issue_id = ?", currentUser.getDirectoryId(), globalId);
+            Todo[] todos = ao.find(Todo.class, "issue_id = ?", globalId);
             if (todos.length > 0 && todos[0].getVersion() == version){
                 map.put("newVersion", false);
             }else{
